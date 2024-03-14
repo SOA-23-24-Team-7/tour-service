@@ -28,3 +28,14 @@ func (repo *TourRepository) Find(id int64) (model.Tour, error){
 	println("Rows affected: ", dbResult.RowsAffected)
 	return tour, nil
 }
+
+func (repo *TourRepository) FindAll(id int64) ([]model.Tour,error){
+	var tours []model.Tour
+	dbResult := repo.DatabaseConnection.Where("author_id = ?", id).Find(&tours)
+
+	if(dbResult.Error != nil){
+		return nil, dbResult.Error
+	}
+	println("Rows affected: ", dbResult.RowsAffected)
+	return tours, nil
+}

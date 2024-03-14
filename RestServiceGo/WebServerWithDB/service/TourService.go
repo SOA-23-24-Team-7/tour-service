@@ -25,3 +25,11 @@ func (service *TourService) Find(id int64) (*model.Tour, error){
 
 	return &tour, nil
 }
+
+func (service *TourService) FindAll(id int64)([]model.Tour,error){
+	tours,err := service.TourRepo.FindAll(id)
+	if err != nil{
+		return nil,err
+	}
+	return tours,nil
+}

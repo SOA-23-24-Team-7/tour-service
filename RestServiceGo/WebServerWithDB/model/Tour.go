@@ -48,9 +48,9 @@ type Tour struct {
 //     if (Price < 0) throw new ArgumentException("Price cannot be negative");
 // }
 func(t *Tour)  Validate() error{
-	if(t.Id == 0){
-		return errors.New("id of entity must be positive value")
-	}
+	// if(t.Id == 0){
+	// 	return errors.New("id of entity must be positive value")
+	// }
 	if(t.AuthorId == 0){
 		return errors.New("tour must have an author")
 	}
