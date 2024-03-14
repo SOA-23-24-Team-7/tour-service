@@ -33,6 +33,7 @@ func startServer(controller *controller.TourController) {
 	//router.HandleFunc("/tours/{id}", controller.Get).Methods("GET")
 	router.HandleFunc("/tours", controller.Create).Methods("POST")
 	router.HandleFunc("/tours/authors/{id}", controller.GetAll).Methods("GET")
+	router.HandleFunc("/tours/{id}", controller.Get).Methods("GET")
 
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./static")))
 	println("Server starting")

@@ -29,7 +29,7 @@ func (controller *TourController) Create(writer http.ResponseWriter, req *http.R
 		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	
+
 	err = controller.TourService.Create(&tour)
 	if err != nil {
 		println("Error while creating a new student")
@@ -56,8 +56,6 @@ func (controller *TourController) GetAll(writer http.ResponseWriter, req *http.R
 		writer.WriteHeader(http.StatusBadRequest)
 		return
 	}
-
-	
 	tours,err := controller.TourService.FindAll(id)
 	if err != nil {
 		writer.WriteHeader(http.StatusExpectationFailed)
@@ -70,4 +68,27 @@ func (controller *TourController) GetAll(writer http.ResponseWriter, req *http.R
 		println("Error while encoding tour to JSON")
 		}
 	writer.Write(toursJson) 
+}
+
+func (controller *TourController) Get(writer http.ResponseWriter, req *http.Request){
+	idStr := mux.Vars(req)["id"]
+	id, err := strconv.ParseInt(idStr, 10, 64)
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	tour,err := controller.TourService.Find(id)
+	if err != nil {
+		writer.WriteHeader(http.StatusExpectationFailed)
+	}
+
+	writer.Header().Set("Content-Type", "application/json")
+	writer.WriteHeader(http.StatusOK)
+	toursJson,err := json.Marshal(tour)
+	if err != nil {
+		println("Error while encoding tour to JSON")
+		}
+	writer.Write(toursJson) 
+
 }
