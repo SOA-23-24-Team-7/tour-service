@@ -30,14 +30,13 @@ type Tour struct {
 	Description string `json:"description"`
 	Difficulty int `json:"difficulty"`
 	Tags pq.StringArray `json:"tags" gorm:"type:text[]"`
-	Statis TourStatus `json:"status"`
+	Status TourStatus `json:"status"`
 	Price float32 `json:"price"`
-	IsDeleted bool `json:"idDeleted"`
+	IsDeleted bool `json:"isDeleted"`
 	Distance float32 `json:"distance"`
 	PublishDate time.Time `json:"publishDate"`
 	ArchiveDate time.Time `json:"archiveDate"`
-	Category TourCategory `json:"category"`
-	
+	Category TourCategory `json:"category"`	
 }
 
 // private void Validate()

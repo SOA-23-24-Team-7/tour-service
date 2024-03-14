@@ -4,6 +4,7 @@ import (
 	"database-example/model"
 	"database-example/service"
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
@@ -14,6 +15,7 @@ type TourController struct {
 func (controller *TourController) Create(writer http.ResponseWriter, req *http.Request) {
 	var tour model.Tour
 	err := json.NewDecoder(req.Body).Decode(&tour)
+	fmt.Println(tour)
 	if err != nil {
 		println("Error while parsing json")
 		writer.WriteHeader(http.StatusBadRequest)
@@ -25,7 +27,15 @@ func (controller *TourController) Create(writer http.ResponseWriter, req *http.R
 		writer.WriteHeader(http.StatusExpectationFailed)
 		return
 	}
-	writer.WriteHeader(http.StatusCreated)
+	
 	writer.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(writer).Encode(tour)
+	writer.WriteHeader(http.StatusCreated)
+	tourJSON, err := json.Marshal(tour)
+	if err != nil {
+    println("Error while encoding tour to JSON")
+	}
+    writer.WriteHeader(http.StatusInternalServerError)
+	writer.Write(tourJSON)
+    
+//ovdje je bio jedan return 
 }
