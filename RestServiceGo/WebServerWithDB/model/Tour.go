@@ -36,7 +36,9 @@ type Tour struct {
 	Distance float32 `json:"distance"`
 	PublishDate time.Time `json:"publishDate"`
 	ArchiveDate time.Time `json:"archiveDate"`
-	Category TourCategory `json:"category"`	
+	Category TourCategory `json:"category"`
+	AverageRating float32 `json:"averageRating"`
+		
 }
 
 // private void Validate()
