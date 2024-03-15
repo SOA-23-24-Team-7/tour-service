@@ -22,18 +22,25 @@ func initDB() *gorm.DB {
 	}
 
 	database.AutoMigrate(&model.Tour{})
+	database.AutoMigrate(&model.Equipment{})
 	return database
 }
 
 
-func startServer(controller *controller.TourController) {
+func startServer(tourController *controller.TourController, 
+	equipmentController *controller.EquipmentController ) {
 	router := mux.NewRouter().StrictSlash(true)
 
 	//TOURS
 	//router.HandleFunc("/tours/{id}", controller.Get).Methods("GET")
-	router.HandleFunc("/tours", controller.Create).Methods("POST")
-	router.HandleFunc("/tours/authors/{id}", controller.GetAll).Methods("GET")
-	router.HandleFunc("/tours/{id}", controller.Get).Methods("GET")
+	router.HandleFunc("/tours", tourController.Create).Methods("POST")
+	router.HandleFunc("/tours/authors/{id}", tourController.GetAll).Methods("GET")
+	router.HandleFunc("/tours/{id}", tourController.Get).Methods("GET")
+
+	//equipment
+	router.HandleFunc("/equipment", equipmentController.Create).Methods("POST")
+	router.HandleFunc("/equipment", equipmentController.GetAll).Methods("GET")
+	router.HandleFunc("/equipment/{id}", equipmentController.Get).Methods("GET")
 
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./static")))
 	println("Server starting")
@@ -51,5 +58,12 @@ func main() {
 	tourService := &service.TourService{TourRepo: tourRepository}
 	tourController := &controller.TourController{TourService: tourService}
 
-	startServer(tourController)
+	//equipment
+	equipmentRepository := &repo.EquipmentRepository{DatabaseConnection: database}
+	equipmentService := &service.EquipmentService{EquipmentRepo: equipmentRepository}
+	equipmentController := &controller.EquipmentController{EquipmentService: equipmentService}
+
+
+	//tour-equipment
+	startServer(tourController,equipmentController)
 }
