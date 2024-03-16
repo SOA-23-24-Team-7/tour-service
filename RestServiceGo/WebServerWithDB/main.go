@@ -23,12 +23,15 @@ func initDB() *gorm.DB {
 
 	database.AutoMigrate(&model.Tour{})
 	database.AutoMigrate(&model.Equipment{})
+	database.AutoMigrate(&model.KeyPoint{})
+
 	return database
 }
 
 
 func startServer(tourController *controller.TourController, 
-	equipmentController *controller.EquipmentController ) {
+	equipmentController *controller.EquipmentController,
+	keyPointController *controller.KeyPointController) {
 	router := mux.NewRouter().StrictSlash(true)
 
 	//TOURS
@@ -41,6 +44,10 @@ func startServer(tourController *controller.TourController,
 	router.HandleFunc("/equipment", equipmentController.Create).Methods("POST")
 	router.HandleFunc("/equipment", equipmentController.GetAll).Methods("GET")
 	router.HandleFunc("/equipment/{id}", equipmentController.Get).Methods("GET")
+
+	//key points
+	router.HandleFunc("/key-points", keyPointController.Create).Methods("POST")
+	router.HandleFunc("/tours/{tourId}/key-points", keyPointController.GetAll).Methods("GET")
 
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./static")))
 	println("Server starting")
@@ -63,7 +70,10 @@ func main() {
 	equipmentService := &service.EquipmentService{EquipmentRepo: equipmentRepository}
 	equipmentController := &controller.EquipmentController{EquipmentService: equipmentService}
 
+	keyPointRepository := &repo.KeyPointRepository{DatabaseConnection: database}
+	keyPointService := &service.KeyPointService{KeyPointRepo: keyPointRepository}
+	keyPointController := &controller.KeyPointController{KeyPointService: keyPointService}
 
 	//tour-equipment
-	startServer(tourController,equipmentController)
+	startServer(tourController, equipmentController, keyPointController)
 }
