@@ -44,6 +44,7 @@ func startServer(tourController *controller.TourController,
 
 	//tour-equipment
 	router.HandleFunc("/tours/equipment/{tourId}/{equipmentId}",tourController.AddEquipment).Methods("POST")
+	router.HandleFunc("/tours/equipment/{tourId}",tourController.GetEquipment).Methods("GET")
 
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./static")))
 	println("Server starting")

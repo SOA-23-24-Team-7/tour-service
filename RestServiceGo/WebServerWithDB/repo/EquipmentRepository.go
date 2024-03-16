@@ -25,7 +25,7 @@ func (repo *EquipmentRepository) Find(id int64) (model.Equipment, error){
 	if(dbResult.Error != nil){
 		return equipment, dbResult.Error
 	}
-	println("Rows affected: ", dbResult.RowsAffected)
+	println("Rows affected -find equipment: ", dbResult.RowsAffected)
 	return equipment, nil
 }
 

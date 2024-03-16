@@ -13,7 +13,7 @@ type TourRepository struct {
 } 
 
 func(repo *TourRepository) Create(tour *model.Tour) error{
-	dbResult := repo.DatabaseConnection.Create(tour)
+	dbResult :=  repo.DatabaseConnection.Create(tour)
 	if dbResult.Error != nil {
 		return dbResult.Error
 	}
@@ -42,32 +42,49 @@ func (repo *TourRepository) FindAll(id int64) ([]model.Tour,error){
 	return tours, nil
 }
 
-func (repo *TourRepository) AddEquipment(tourId int64,equipment *model.Equipment) error{
+func (repo *TourRepository) AddEquipment(tourId int64,equipmentId int64) error{
 
-	var retrievedEquipment model.Equipment
-	tour,errorr := repo.Find(tourId)
-	query := `
-    SELECT t.*
-    FROM equipment t
-    JOIN tour_equipments te ON t.id = te.equipment_id
-    WHERE te.equipment_id = ?;
-`
-	//find tour
-
-	errr := repo.DatabaseConnection.Raw(query, equipment.Id).Scan(&retrievedEquipment).Error
-	if errr != nil || errorr != nil {
+	//var retrievedEquipment model.Equipment
+	tour,errr := repo.Find(tourId)
+	if errr != nil  {
 		fmt.Println(errr)
 		return errr
 	}
+	
+	var equipment []model.Equipment
+	query := `
+	SELECT * FROM equipment e
+	WHERE e.id = ?;
+`
+	dbResult := repo.DatabaseConnection.Raw(query, equipmentId).Scan(&equipment)
+	 if dbResult.Error != nil{
+		fmt.Println(dbResult.Error)
+		return errors.New("error fetching equipment")
+	 }
 
-	//da li postoji vec veza?
-	fmt.Println(retrievedEquipment)
-	if retrievedEquipment.Id != 0{
-		return errors.New("equipment already in use")
-	}
 	err := repo.DatabaseConnection.Model(&tour).Association("Equipment").Append(equipment)
 	if err != nil {
 		return err
 	}
 	return nil
+}
+
+func (repo *TourRepository) GetToursEquipment(tourId int64) ([]model.Equipment,error){
+
+	var retrievedEquipment []model.Equipment
+	query := `
+    SELECT t.*
+    FROM equipment t
+    JOIN tour_equipments te ON t.id = te.equipment_id
+    WHERE te.tour_id = ?;
+`
+	//find tour
+
+	errr := repo.DatabaseConnection.Raw(query, tourId).Scan(&retrievedEquipment).Error
+	if errr != nil  {
+		fmt.Println(errr)
+		return nil,errr
+	}
+
+	return retrievedEquipment,nil
 }

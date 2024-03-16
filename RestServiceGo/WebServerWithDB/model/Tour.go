@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/lib/pq"
-	"gorm.io/gorm"
 )
 
 type TourStatus int
@@ -41,7 +40,7 @@ type Tour struct {
 	AverageRating float32 `json:"averageRating"`
 
 	//
-	Equipment []Equipment `gorm:"many2many:tour_equipments;"`
+	Equipment []*Equipment `gorm:"many2many:tour_equipments;"`
 		
 }
 
@@ -76,9 +75,3 @@ func(t *Tour)  Validate() error{
 	return nil
 }
 
-func (tour *Tour) AfterFind(tx *gorm.DB) error {
-    if tour.Equipment == nil {
-        tour.Equipment = make([]Equipment, 1)
-    }
-    return nil
-}

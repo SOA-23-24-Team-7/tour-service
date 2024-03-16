@@ -3,7 +3,6 @@ package service
 import (
 	"database-example/model"
 	"database-example/repo"
-	"errors"
 )
 
 type TourService struct{
@@ -36,15 +35,22 @@ func (service *TourService) FindAll(id int64)([]model.Tour,error){
 	return tours,nil
 }
 
-func (service *TourService) AddEquipment(tourId int64, equipmentId int64) error{
+func  (service *TourService) AddEquipment(tourId int64, equipmentId int64) error{
 	//fetch equipment
-	equipment,err := service.EquipmentRepo.Find(equipmentId)
-	if err != nil{
-		return errors.New("invalid equipmentId")
-	}
-	err2 := service.TourRepo.AddEquipment(tourId,&equipment)
+	
+	err2 := service.TourRepo.AddEquipment(tourId,equipmentId)
 	if err2 != nil{
 		return err2
 	}
 	return nil
+}
+
+func (service *TourService) GetEquipment(tourId int64) ([]model.Equipment,error){
+	//fetch equipment
+	
+	equioment,err2 := service.TourRepo.GetToursEquipment(tourId)
+	if err2 != nil{
+		return nil,err2
+	}
+	return equioment,nil
 }

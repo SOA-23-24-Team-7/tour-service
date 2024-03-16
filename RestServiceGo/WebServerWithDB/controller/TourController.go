@@ -118,3 +118,25 @@ func (controller *TourController) AddEquipment(writer http.ResponseWriter, req *
 	return
 
 }
+
+func (controller *TourController) GetEquipment(writer http.ResponseWriter, req *http.Request){
+	tourIdStr := mux.Vars(req)["tourId"]
+	tourId, err := strconv.ParseInt(tourIdStr, 10, 64)
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	equipment,errorr := controller.TourService.GetEquipment(tourId)
+	if errorr != nil{
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	if(equipment == nil){
+		equipment = make([]model.Equipment, 0)
+	}
+	writer.WriteHeader(http.StatusOK)
+	json.NewEncoder(writer).Encode(equipment)
+	
+
+}
