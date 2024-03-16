@@ -38,6 +38,9 @@ type Tour struct {
 	ArchiveDate time.Time `json:"archiveDate"`
 	Category TourCategory `json:"category"`
 	AverageRating float32 `json:"averageRating"`
+
+	//
+	Equipment []*Equipment `gorm:"many2many:tour_equipments;"`
 		
 }
 
@@ -71,3 +74,4 @@ func(t *Tour)  Validate() error{
 	}
 	return nil
 }
+

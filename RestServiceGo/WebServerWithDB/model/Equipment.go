@@ -6,6 +6,9 @@ type Equipment struct {
 	Id          int64  `json:"id"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
+
+	//Tours
+	Tours 		[]Tour `gorm:"many2many:tour_equipments;"`
 }
 
 func (equipment *Equipment) Validate() error {

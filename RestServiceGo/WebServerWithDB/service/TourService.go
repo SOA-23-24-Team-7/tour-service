@@ -7,6 +7,7 @@ import (
 
 type TourService struct{
 	TourRepo *repo.TourRepository
+	EquipmentRepo *repo.EquipmentRepository
 }
 
 func (service *TourService) Create(tour *model.Tour) error{
@@ -32,4 +33,33 @@ func (service *TourService) FindAll(id int64)([]model.Tour,error){
 		return nil,err
 	}
 	return tours,nil
+}
+
+func  (service *TourService) AddEquipment(tourId int64, equipmentId int64) error{
+	//fetch equipment
+	
+	err2 := service.TourRepo.AddEquipment(tourId,equipmentId)
+	if err2 != nil{
+		return err2
+	}
+	return nil
+}
+
+func (service *TourService) GetEquipment(tourId int64) ([]model.Equipment,error){
+	//fetch equipment
+	
+	equioment,err2 := service.TourRepo.GetToursEquipment(tourId)
+	if err2 != nil{
+		return nil,err2
+	}
+	return equioment,nil
+}
+
+func  (service *TourService) DeleteEquipment(tourId int64, equipmentId int64) error{
+
+	err2 := service.TourRepo.DeleteEquipment(tourId,equipmentId)
+	if err2 != nil{
+		return err2
+	}
+	return nil
 }
