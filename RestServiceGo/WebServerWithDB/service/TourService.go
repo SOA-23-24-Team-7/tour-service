@@ -54,3 +54,12 @@ func (service *TourService) GetEquipment(tourId int64) ([]model.Equipment,error)
 	}
 	return equioment,nil
 }
+
+func  (service *TourService) DeleteEquipment(tourId int64, equipmentId int64) error{
+
+	err2 := service.TourRepo.DeleteEquipment(tourId,equipmentId)
+	if err2 != nil{
+		return err2
+	}
+	return nil
+}

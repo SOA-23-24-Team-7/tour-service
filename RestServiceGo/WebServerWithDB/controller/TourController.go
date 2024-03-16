@@ -140,3 +140,28 @@ func (controller *TourController) GetEquipment(writer http.ResponseWriter, req *
 	
 
 }
+
+func (controller *TourController) DeleteEquipment(writer http.ResponseWriter, req *http.Request){
+	tourIdStr := mux.Vars(req)["tourId"]
+	tourId, err := strconv.ParseInt(tourIdStr, 10, 64)
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	equipmentIdStr := mux.Vars(req)["equipmentId"]
+	equipmentId, err := strconv.ParseInt(equipmentIdStr, 10, 64)
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	errorr := controller.TourService.DeleteEquipment(tourId,equipmentId)
+	if errorr != nil{
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	writer.WriteHeader(http.StatusOK)
+
+}

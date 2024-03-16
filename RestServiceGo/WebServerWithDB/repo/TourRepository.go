@@ -88,3 +88,30 @@ func (repo *TourRepository) GetToursEquipment(tourId int64) ([]model.Equipment,e
 
 	return retrievedEquipment,nil
 }
+
+func (repo *TourRepository) DeleteEquipment(tourId int64,equipmentId int64) error{
+
+	//var retrievedEquipment model.Equipment
+	tour,errr := repo.Find(tourId)
+	if errr != nil  {
+		fmt.Println(errr)
+		return errr
+	}
+	
+	var equipment []model.Equipment
+	query := `
+	SELECT * FROM equipment e
+	WHERE e.id = ?;
+`
+	dbResult := repo.DatabaseConnection.Raw(query, equipmentId).Scan(&equipment)
+	 if dbResult.Error != nil{
+		fmt.Println(dbResult.Error)
+		return errors.New("error fetching equipment")
+	 }
+
+	err := repo.DatabaseConnection.Model(&tour).Association("Equipment").Delete(equipment)
+	if err != nil {
+		return err
+	}
+	return nil
+}
