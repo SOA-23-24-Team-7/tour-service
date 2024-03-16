@@ -3,10 +3,12 @@ package service
 import (
 	"database-example/model"
 	"database-example/repo"
+	"errors"
 )
 
 type TourService struct{
 	TourRepo *repo.TourRepository
+	EquipmentRepo *repo.EquipmentRepository
 }
 
 func (service *TourService) Create(tour *model.Tour) error{
@@ -32,4 +34,17 @@ func (service *TourService) FindAll(id int64)([]model.Tour,error){
 		return nil,err
 	}
 	return tours,nil
+}
+
+func (service *TourService) AddEquipment(tourId int64, equipmentId int64) error{
+	//fetch equipment
+	equipment,err := service.EquipmentRepo.Find(equipmentId)
+	if err != nil{
+		return errors.New("invalid equipmentId")
+	}
+	err2 := service.TourRepo.AddEquipment(tourId,&equipment)
+	if err2 != nil{
+		return err2
+	}
+	return nil
 }

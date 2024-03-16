@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/lib/pq"
+	"gorm.io/gorm"
 )
 
 type TourStatus int
@@ -38,6 +39,9 @@ type Tour struct {
 	ArchiveDate time.Time `json:"archiveDate"`
 	Category TourCategory `json:"category"`
 	AverageRating float32 `json:"averageRating"`
+
+	//
+	Equipment []Equipment `gorm:"many2many:tour_equipments;"`
 		
 }
 
@@ -70,4 +74,11 @@ func(t *Tour)  Validate() error{
 		return errors.New("price can not be egative")
 	}
 	return nil
+}
+
+func (tour *Tour) AfterFind(tx *gorm.DB) error {
+    if tour.Equipment == nil {
+        tour.Equipment = make([]Equipment, 1)
+    }
+    return nil
 }

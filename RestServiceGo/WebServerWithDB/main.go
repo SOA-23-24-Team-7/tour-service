@@ -42,6 +42,9 @@ func startServer(tourController *controller.TourController,
 	router.HandleFunc("/equipment", equipmentController.GetAll).Methods("GET")
 	router.HandleFunc("/equipment/{id}", equipmentController.Get).Methods("GET")
 
+	//tour-equipment
+	router.HandleFunc("/tours/equipment/{tourId}/{equipmentId}",tourController.AddEquipment).Methods("POST")
+
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./static")))
 	println("Server starting")
 	log.Fatal(http.ListenAndServe(":8087", router))
@@ -54,14 +57,17 @@ func main() {
 		return
 	}
 
-	tourRepository := &repo.TourRepository{DatabaseConnection: database}
-	tourService := &service.TourService{TourRepo: tourRepository}
-	tourController := &controller.TourController{TourService: tourService}
-
 	//equipment
 	equipmentRepository := &repo.EquipmentRepository{DatabaseConnection: database}
 	equipmentService := &service.EquipmentService{EquipmentRepo: equipmentRepository}
 	equipmentController := &controller.EquipmentController{EquipmentService: equipmentService}
+
+	tourRepository := &repo.TourRepository{DatabaseConnection: database}
+	tourService := &service.TourService{TourRepo: tourRepository,
+										EquipmentRepo: equipmentRepository}
+	tourController := &controller.TourController{TourService: tourService}
+
+	
 
 
 	//tour-equipment
