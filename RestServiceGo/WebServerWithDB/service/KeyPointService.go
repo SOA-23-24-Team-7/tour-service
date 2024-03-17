@@ -18,12 +18,12 @@ func (service *KeyPointService) Create(keyPoint *model.KeyPoint) error {
 }
 
 func (service *KeyPointService) Find(id int64) (*model.KeyPoint, error) {
-	tour, err := service.KeyPointRepo.Find(id)
+	keyPoint, err := service.KeyPointRepo.Find(id)
 	if err != nil {
 		return nil, err
 	}
 
-	return &tour, nil
+	return &keyPoint, nil
 }
 
 func (service *KeyPointService) FindAll(id int64) ([]model.KeyPoint, error) {
