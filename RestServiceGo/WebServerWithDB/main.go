@@ -25,6 +25,7 @@ func initDB() *gorm.DB {
 	database.AutoMigrate(&model.Equipment{})
 	database.AutoMigrate(&model.KeyPoint{})
 	database.AutoMigrate(&model.TourPreference{})
+	database.AutoMigrate(&model.Facility{})
 
 	return database
 }
@@ -32,7 +33,8 @@ func initDB() *gorm.DB {
 func startServer(tourController *controller.TourController,
 	equipmentController *controller.EquipmentController,
 	keyPointController *controller.KeyPointController,
-	tourPreferenceController *controller.TourPreferenceController) {
+	tourPreferenceController *controller.TourPreferenceController,
+	facilityController *controller.FacilityController) {
 	router := mux.NewRouter().StrictSlash(true)
 
 	//TOURS
@@ -47,9 +49,9 @@ func startServer(tourController *controller.TourController,
 	router.HandleFunc("/equipment/{id}", equipmentController.Get).Methods("GET")
 
 	//tour-equipment
-	router.HandleFunc("/tours/equipment/{tourId}/{equipmentId}",tourController.AddEquipment).Methods("POST")
-	router.HandleFunc("/tours/equipment/{tourId}",tourController.GetEquipment).Methods("GET")
-	router.HandleFunc("/tours/equipment/{tourId}/{equipmentId}",tourController.DeleteEquipment).Methods("DELETE")
+	router.HandleFunc("/tours/equipment/{tourId}/{equipmentId}", tourController.AddEquipment).Methods("POST")
+	router.HandleFunc("/tours/equipment/{tourId}", tourController.GetEquipment).Methods("GET")
+	router.HandleFunc("/tours/equipment/{tourId}/{equipmentId}", tourController.DeleteEquipment).Methods("DELETE")
 
 	//key points
 	router.HandleFunc("/key-points", keyPointController.Create).Methods("POST")
@@ -58,6 +60,10 @@ func startServer(tourController *controller.TourController,
 	//tour preferences
 	router.HandleFunc("/tour-preferences", tourPreferenceController.Create).Methods("POST")
 	router.HandleFunc("/tourists/{userId}/tour-preference", tourPreferenceController.Get).Methods("GET")
+
+	//facilities
+	router.HandleFunc("/facilities", facilityController.Create).Methods("POST")
+	router.HandleFunc("/authors/{userId}/facilities", facilityController.GetAll).Methods("GET")
 
 	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./static")))
 	println("Server starting")
@@ -78,10 +84,8 @@ func main() {
 
 	tourRepository := &repo.TourRepository{DatabaseConnection: database}
 	tourService := &service.TourService{TourRepo: tourRepository,
-										EquipmentRepo: equipmentRepository}
+		EquipmentRepo: equipmentRepository}
 	tourController := &controller.TourController{TourService: tourService}
-
-	
 
 	keyPointRepository := &repo.KeyPointRepository{DatabaseConnection: database}
 	keyPointService := &service.KeyPointService{KeyPointRepo: keyPointRepository}
@@ -91,5 +95,9 @@ func main() {
 	tourPreferenceService := &service.TourPreferenceService{TourPreferenceRepo: tourPreferenceRepository}
 	tourPreferenceController := &controller.TourPreferenceController{TourPreferenceService: tourPreferenceService}
 
-	startServer(tourController, equipmentController, keyPointController, tourPreferenceController)
+	facilityRepository := &repo.FacilityRepository{DatabaseConnection: database}
+	facilityService := &service.FacilityService{FacilityRepo: facilityRepository}
+	facilityController := &controller.FacilityController{FacilityService: facilityService}
+
+	startServer(tourController, equipmentController, keyPointController, tourPreferenceController, facilityController)
 }

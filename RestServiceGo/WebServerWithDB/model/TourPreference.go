@@ -7,7 +7,7 @@ import (
 )
 
 type TourPreference struct {
-	Id              int
+	Id              int64
 	UserId          int64
 	DifficultyLevel int
 	WalkingRating   int
