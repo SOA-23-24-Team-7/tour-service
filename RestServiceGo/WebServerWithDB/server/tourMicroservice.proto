@@ -1,0 +1,208 @@
+syntax = "proto3";
+
+package server;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "/server";
+
+service TourMicroservice {
+    rpc CreatePreference(TourPreferenceCreationRequest) returns (TourPreferenceResponse) {}
+    rpc GetPreference(TourPreferenceIdRequest) returns (TourPreferenceResponse) {}
+    rpc CreateFacility(FacilityCreationRequest) returns (FacilityResponse) {}
+    rpc GetAllFacilities(FacilitiesIdRequest) returns (FacilityListResponse) {}
+    rpc CreateKeyPoint(KeyPointCreationRequest) returns (KeyPointResponse) {}
+    rpc GetAllKeyPoints(KeyPointsIdRequest) returns (KeyPointListResponse) {}
+    rpc GetKeyPoint(KeyPointIdRequest) returns (KeyPointResponse) {}
+    rpc CreateTour(TourCreationRequest) returns (TourResponse) {}
+    rpc GetAllTours(ToursIdRequest) returns (TourListResponse) {}
+    rpc GetTour(TourIdRequest) returns (TourResponse) {}
+    rpc AddTourEquipment(TourEquipmentCreationRequest) returns (EmptyTourMessage) {}
+    rpc GetTourEquipment(TourEquipmentListIdRequest) returns (EquipmentListResponse) {}
+    rpc DeleteTourEquipment(TourEquipmentDeletionRequest) returns (EmptyTourMessage) {}
+    rpc CreateEquipment(EquipmentCreationRequest) returns (EquipmentResponse) {}
+    rpc GetAllEquipment(EmptyTourMessage) returns (EquipmentListResponse) {}
+    rpc GetEquipment(EquipmentIdRequest) returns (EquipmentResponse) {}
+}
+
+message TourPreferenceCreationRequest {
+    int64 userId = 1;
+    int32 difficultyLevel = 2;
+    int32 walkingRating = 3;
+    int32 cyclingRating = 4;
+    int32 carRating = 5;
+    int32 boatRating = 6;
+    repeated string selectedTags = 7;
+}
+
+message TourPreferenceResponse {
+    int64 id = 1;
+    int64 userId = 2;
+    int32 difficultyLevel = 3;
+    int32 walkingRating = 4;
+    int32 cyclingRating = 5;
+    int32 carRating = 6;
+    int32 boatRating = 7;
+    repeated string selectedTags = 8;
+}
+
+message TourPreferenceIdRequest {
+    int64 userId = 1;
+}
+
+message FacilityCreationRequest {
+    string name = 1;
+    string description = 2;
+    string imagePath = 3;
+    int64 authorId = 4;
+    int64 category = 5;
+    float longitude = 6;
+    float latitude = 7;
+}
+
+message FacilityResponse {
+    int64 id = 1;
+    string name = 2;
+    string description = 3;
+    string imagePath = 4;
+    int64 authorId = 5;
+    int32 category = 6;
+    float longitude = 7;
+    float latitude = 8;
+}
+
+message FacilitiesIdRequest {
+    int64 authorId = 1;
+}
+
+message FacilityListResponse {
+    repeated FacilityResponse facilities = 1;
+}
+
+message KeyPointCreationRequest {
+    int64 tourId = 1;
+    string name = 2;
+    string description = 3;
+    float longitude = 4;
+    float latitude = 5;
+    string locationAddress = 6;
+    string imagePath = 7;
+    int32 order = 8;
+    KeyPointSecretCreationRequest secret = 9;
+}
+
+message KeyPointSecretCreationRequest {
+    repeated string images = 1;
+    string description = 2;
+}
+
+message KeyPointResponse {
+    int64 id = 1;
+    int64 tourId = 2;
+    string name = 3;
+    string description = 4;
+    float longitude = 5;
+    float latitude = 6;
+    string locationAddress = 7;
+    string imagePath = 8;
+    int32 order = 9;
+    bool haveSecret = 10;
+    KeyPointSecretResponse secret = 11;
+}
+
+message KeyPointSecretResponse {
+    repeated string images = 1;
+    string description = 2;
+}
+
+message KeyPointsIdRequest {
+    int64 tourId = 1;
+}
+
+message KeyPointListResponse {
+    repeated KeyPointResponse keyPoints = 1;
+}
+
+message KeyPointIdRequest {
+    int64 id = 1;
+}
+
+message TourCreationRequest {
+    int64 authorId = 1;
+    string name = 2;
+    string description = 3;
+    int32 difficulty = 4;
+    repeated string tags = 5;
+    int32 status = 6;
+    float price = 7;
+    bool isDeleted = 8;
+    float distance = 9;
+    int32 category = 10;
+}
+
+message TourResponse {
+    int64 id = 1;
+    int64 authorId = 2;
+    string name = 3;
+    string description = 4;
+    int32 difficulty = 5;
+    repeated string tags = 6;
+    int32 status = 7;
+    float price = 8;
+    bool isDeleted = 9;
+    float distance = 10;
+    google.protobuf.Timestamp publishDate = 11;
+    google.protobuf.Timestamp archiveDate = 12;
+    int32 category = 13;
+    float averageRating = 14;
+    repeated EquipmentResponse equipment = 15;
+}
+
+message ToursIdRequest {
+    int64 authorId = 1;
+}
+
+message TourListResponse {
+    repeated TourResponse tours = 1;
+}
+
+message TourIdRequest {
+    int64 id = 1;
+}
+
+message TourEquipmentCreationRequest {
+    int64 tourId = 1;
+    int64 equipmentId = 2;
+}
+
+message EquipmentIdRequest {
+    int64 id = 1;
+}
+
+message TourEquipmentListIdRequest {
+    int64 tourId = 1;
+}
+
+message EquipmentListResponse {
+    repeated EquipmentResponse equipment = 1;
+}
+
+message EquipmentCreationRequest {
+    string name = 1;
+    string description = 2;
+}
+
+message EquipmentResponse {
+    int64 id = 1;
+    string name = 2;
+    string description = 3;
+}
+
+message TourEquipmentDeletionRequest {
+    int64 tourId = 1;
+    int64 equipmentId = 2;
+}
+
+message EmptyTourMessage {
+
+}
