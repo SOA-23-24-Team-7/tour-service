@@ -32,11 +32,11 @@ type TourMicroserviceClient interface {
 	CreateTour(ctx context.Context, in *TourCreationRequest, opts ...grpc.CallOption) (*TourResponse, error)
 	GetAllTours(ctx context.Context, in *ToursIdRequest, opts ...grpc.CallOption) (*TourListResponse, error)
 	GetTour(ctx context.Context, in *TourIdRequest, opts ...grpc.CallOption) (*TourResponse, error)
-	AddTourEquipment(ctx context.Context, in *TourEquipmentCreationRequest, opts ...grpc.CallOption) (*Empty, error)
+	AddTourEquipment(ctx context.Context, in *TourEquipmentCreationRequest, opts ...grpc.CallOption) (*EmptyTourMessage, error)
 	GetTourEquipment(ctx context.Context, in *TourEquipmentListIdRequest, opts ...grpc.CallOption) (*EquipmentListResponse, error)
-	DeleteTourEquipment(ctx context.Context, in *TourEquipmentDeletionRequest, opts ...grpc.CallOption) (*Empty, error)
+	DeleteTourEquipment(ctx context.Context, in *TourEquipmentDeletionRequest, opts ...grpc.CallOption) (*EmptyTourMessage, error)
 	CreateEquipment(ctx context.Context, in *EquipmentCreationRequest, opts ...grpc.CallOption) (*EquipmentResponse, error)
-	GetAllEquipment(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*EquipmentListResponse, error)
+	GetAllEquipment(ctx context.Context, in *EmptyTourMessage, opts ...grpc.CallOption) (*EquipmentListResponse, error)
 	GetEquipment(ctx context.Context, in *EquipmentIdRequest, opts ...grpc.CallOption) (*EquipmentResponse, error)
 }
 
@@ -138,8 +138,8 @@ func (c *tourMicroserviceClient) GetTour(ctx context.Context, in *TourIdRequest,
 	return out, nil
 }
 
-func (c *tourMicroserviceClient) AddTourEquipment(ctx context.Context, in *TourEquipmentCreationRequest, opts ...grpc.CallOption) (*Empty, error) {
-	out := new(Empty)
+func (c *tourMicroserviceClient) AddTourEquipment(ctx context.Context, in *TourEquipmentCreationRequest, opts ...grpc.CallOption) (*EmptyTourMessage, error) {
+	out := new(EmptyTourMessage)
 	err := c.cc.Invoke(ctx, "/server.TourMicroservice/AddTourEquipment", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -156,8 +156,8 @@ func (c *tourMicroserviceClient) GetTourEquipment(ctx context.Context, in *TourE
 	return out, nil
 }
 
-func (c *tourMicroserviceClient) DeleteTourEquipment(ctx context.Context, in *TourEquipmentDeletionRequest, opts ...grpc.CallOption) (*Empty, error) {
-	out := new(Empty)
+func (c *tourMicroserviceClient) DeleteTourEquipment(ctx context.Context, in *TourEquipmentDeletionRequest, opts ...grpc.CallOption) (*EmptyTourMessage, error) {
+	out := new(EmptyTourMessage)
 	err := c.cc.Invoke(ctx, "/server.TourMicroservice/DeleteTourEquipment", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -174,7 +174,7 @@ func (c *tourMicroserviceClient) CreateEquipment(ctx context.Context, in *Equipm
 	return out, nil
 }
 
-func (c *tourMicroserviceClient) GetAllEquipment(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*EquipmentListResponse, error) {
+func (c *tourMicroserviceClient) GetAllEquipment(ctx context.Context, in *EmptyTourMessage, opts ...grpc.CallOption) (*EquipmentListResponse, error) {
 	out := new(EquipmentListResponse)
 	err := c.cc.Invoke(ctx, "/server.TourMicroservice/GetAllEquipment", in, out, opts...)
 	if err != nil {
@@ -206,11 +206,11 @@ type TourMicroserviceServer interface {
 	CreateTour(context.Context, *TourCreationRequest) (*TourResponse, error)
 	GetAllTours(context.Context, *ToursIdRequest) (*TourListResponse, error)
 	GetTour(context.Context, *TourIdRequest) (*TourResponse, error)
-	AddTourEquipment(context.Context, *TourEquipmentCreationRequest) (*Empty, error)
+	AddTourEquipment(context.Context, *TourEquipmentCreationRequest) (*EmptyTourMessage, error)
 	GetTourEquipment(context.Context, *TourEquipmentListIdRequest) (*EquipmentListResponse, error)
-	DeleteTourEquipment(context.Context, *TourEquipmentDeletionRequest) (*Empty, error)
+	DeleteTourEquipment(context.Context, *TourEquipmentDeletionRequest) (*EmptyTourMessage, error)
 	CreateEquipment(context.Context, *EquipmentCreationRequest) (*EquipmentResponse, error)
-	GetAllEquipment(context.Context, *Empty) (*EquipmentListResponse, error)
+	GetAllEquipment(context.Context, *EmptyTourMessage) (*EquipmentListResponse, error)
 	GetEquipment(context.Context, *EquipmentIdRequest) (*EquipmentResponse, error)
 	mustEmbedUnimplementedTourMicroserviceServer()
 }
@@ -249,19 +249,19 @@ func (UnimplementedTourMicroserviceServer) GetAllTours(context.Context, *ToursId
 func (UnimplementedTourMicroserviceServer) GetTour(context.Context, *TourIdRequest) (*TourResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTour not implemented")
 }
-func (UnimplementedTourMicroserviceServer) AddTourEquipment(context.Context, *TourEquipmentCreationRequest) (*Empty, error) {
+func (UnimplementedTourMicroserviceServer) AddTourEquipment(context.Context, *TourEquipmentCreationRequest) (*EmptyTourMessage, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddTourEquipment not implemented")
 }
 func (UnimplementedTourMicroserviceServer) GetTourEquipment(context.Context, *TourEquipmentListIdRequest) (*EquipmentListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTourEquipment not implemented")
 }
-func (UnimplementedTourMicroserviceServer) DeleteTourEquipment(context.Context, *TourEquipmentDeletionRequest) (*Empty, error) {
+func (UnimplementedTourMicroserviceServer) DeleteTourEquipment(context.Context, *TourEquipmentDeletionRequest) (*EmptyTourMessage, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteTourEquipment not implemented")
 }
 func (UnimplementedTourMicroserviceServer) CreateEquipment(context.Context, *EquipmentCreationRequest) (*EquipmentResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateEquipment not implemented")
 }
-func (UnimplementedTourMicroserviceServer) GetAllEquipment(context.Context, *Empty) (*EquipmentListResponse, error) {
+func (UnimplementedTourMicroserviceServer) GetAllEquipment(context.Context, *EmptyTourMessage) (*EquipmentListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllEquipment not implemented")
 }
 func (UnimplementedTourMicroserviceServer) GetEquipment(context.Context, *EquipmentIdRequest) (*EquipmentResponse, error) {
@@ -533,7 +533,7 @@ func _TourMicroservice_CreateEquipment_Handler(srv interface{}, ctx context.Cont
 }
 
 func _TourMicroservice_GetAllEquipment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Empty)
+	in := new(EmptyTourMessage)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -545,7 +545,7 @@ func _TourMicroservice_GetAllEquipment_Handler(srv interface{}, ctx context.Cont
 		FullMethod: "/server.TourMicroservice/GetAllEquipment",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TourMicroserviceServer).GetAllEquipment(ctx, req.(*Empty))
+		return srv.(TourMicroserviceServer).GetAllEquipment(ctx, req.(*EmptyTourMessage))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -572,7 +572,7 @@ func _TourMicroservice_GetEquipment_Handler(srv interface{}, ctx context.Context
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var TourMicroservice_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "server.TourMicroservice",
+	ServiceName: "TourMicroservice",
 	HandlerType: (*TourMicroserviceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

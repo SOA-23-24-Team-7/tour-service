@@ -17,11 +17,11 @@ service TourMicroservice {
     rpc CreateTour(TourCreationRequest) returns (TourResponse) {}
     rpc GetAllTours(ToursIdRequest) returns (TourListResponse) {}
     rpc GetTour(TourIdRequest) returns (TourResponse) {}
-    rpc AddTourEquipment(TourEquipmentCreationRequest) returns (Empty) {}
+    rpc AddTourEquipment(TourEquipmentCreationRequest) returns (EmptyTourMessage) {}
     rpc GetTourEquipment(TourEquipmentListIdRequest) returns (EquipmentListResponse) {}
-    rpc DeleteTourEquipment(TourEquipmentDeletionRequest) returns (Empty) {}
+    rpc DeleteTourEquipment(TourEquipmentDeletionRequest) returns (EmptyTourMessage) {}
     rpc CreateEquipment(EquipmentCreationRequest) returns (EquipmentResponse) {}
-    rpc GetAllEquipment(Empty) returns (EquipmentListResponse) {}
+    rpc GetAllEquipment(EmptyTourMessage) returns (EquipmentListResponse) {}
     rpc GetEquipment(EquipmentIdRequest) returns (EquipmentResponse) {}
 }
 
@@ -128,17 +128,16 @@ message KeyPointIdRequest {
 }
 
 message TourCreationRequest {
-    int64 id = 1;
-    int64 authorId = 2;
-    string name = 3;
-    string description = 4;
-    int32 difficulty = 5;
-    repeated string tags = 6;
-    int32 status = 7;
-    float price = 8;
-    bool isDeleted = 9;
-    float distance = 10;
-    int32 category = 11;
+    int64 authorId = 1;
+    string name = 2;
+    string description = 3;
+    int32 difficulty = 4;
+    repeated string tags = 5;
+    int32 status = 6;
+    float price = 7;
+    bool isDeleted = 8;
+    float distance = 9;
+    int32 category = 10;
 }
 
 message TourResponse {
@@ -204,6 +203,6 @@ message TourEquipmentDeletionRequest {
     int64 equipmentId = 2;
 }
 
-message Empty {
+message EmptyTourMessage {
 
 }

@@ -239,7 +239,6 @@ func (server *TourMicroservice) GetKeyPoint(ctx context.Context, req *KeyPointId
 
 func (server *TourMicroservice) CreateTour(ctx context.Context, req *TourCreationRequest) (*TourResponse, error) {
 	tour := &model.Tour{
-		Id:          req.Id,
 		AuthorId:    req.AuthorId,
 		Name:        req.Name,
 		Description: req.Description,
@@ -323,13 +322,13 @@ func (server *TourMicroservice) GetTour(ctx context.Context, req *TourIdRequest)
 	return response, nil
 }
 
-func (server *TourMicroservice) AddTourEquipment(ctx context.Context, req *TourEquipmentCreationRequest) (*Empty, error) {
+func (server *TourMicroservice) AddTourEquipment(ctx context.Context, req *TourEquipmentCreationRequest) (*EmptyTourMessage, error) {
 	err := server.TourService.AddEquipment(req.TourId, req.EquipmentId)
 	if err != nil {
 		return nil, err
 	}
 
-	return &Empty{}, nil
+	return &EmptyTourMessage{}, nil
 }
 
 func (server *TourMicroservice) GetTourEquipment(ctx context.Context, req *TourEquipmentListIdRequest) (*EquipmentListResponse, error) {
@@ -351,13 +350,13 @@ func (server *TourMicroservice) GetTourEquipment(ctx context.Context, req *TourE
 	return &response, nil
 }
 
-func (server *TourMicroservice) DeleteTourEquipment(ctx context.Context, req *TourEquipmentDeletionRequest) (*Empty, error) {
+func (server *TourMicroservice) DeleteTourEquipment(ctx context.Context, req *TourEquipmentDeletionRequest) (*EmptyTourMessage, error) {
 	err := server.TourService.DeleteEquipment(req.TourId, req.EquipmentId)
 	if err != nil {
 		return nil, err
 	}
 
-	return &Empty{}, nil
+	return &EmptyTourMessage{}, nil
 }
 
 func (server *TourMicroservice) CreateEquipment(ctx context.Context, req *EquipmentCreationRequest) (*EquipmentResponse, error) {
@@ -379,13 +378,14 @@ func (server *TourMicroservice) CreateEquipment(ctx context.Context, req *Equipm
 	return response, nil
 }
 
-func (server *TourMicroservice) GetAllEquipment(ctx context.Context, req *Empty) (*EquipmentListResponse, error) {
+func (server *TourMicroservice) GetAllEquipment(ctx context.Context, req *EmptyTourMessage) (*EquipmentListResponse, error) {
 	equipment, err := server.EquipmentService.FindAll()
 	if err != nil {
 		return nil, err
 	}
 
 	var response EquipmentListResponse
+	response.Equipment = []*EquipmentResponse{}
 	for _, e := range equipment {
 		response.Equipment = append(response.Equipment, &EquipmentResponse{
 			Id:          e.Id,
