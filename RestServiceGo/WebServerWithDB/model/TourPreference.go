@@ -9,11 +9,11 @@ import (
 type TourPreference struct {
 	Id              int64
 	UserId          int64
-	DifficultyLevel int
-	WalkingRating   int
-	CyclingRating   int
-	CarRating       int
-	BoatRating      int
+	DifficultyLevel int32
+	WalkingRating   int32
+	CyclingRating   int32
+	CarRating       int32
+	BoatRating      int32
 	SelectedTags    pq.StringArray `gorm:"type:text[]"`
 }
 

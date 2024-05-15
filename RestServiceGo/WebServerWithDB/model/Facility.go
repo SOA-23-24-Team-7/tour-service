@@ -4,7 +4,7 @@ import (
 	"errors"
 )
 
-type FacilityCategory int
+type FacilityCategory int32
 
 const (
 	Restaurant FacilityCategory = iota
@@ -26,8 +26,8 @@ type Facility struct {
 	ImagePath   string
 	AuthorId    int64
 	Category    FacilityCategory
-	Longitude   float64
-	Latitude    float64
+	Longitude   float32
+	Latitude    float32
 }
 
 func (f Facility) Validate() error {

@@ -14,11 +14,11 @@ type KeyPoint struct {
 	TourId          int64
 	Name            string
 	Description     string
-	Longitude       float64
-	Latitude        float64
+	Longitude       float32
+	Latitude        float32
 	LocationAddress string
 	ImagePath       string
-	Order           int
+	Order           int32
 	HaveSecret      bool
 	KeyPointSecret  KeyPointSecret `gorm:"type:jsonb;"`
 }
